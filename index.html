@@ -28,7 +28,7 @@ details{border-top:1px solid var(--line);padding:6px 0}summary{cursor:pointer}ul
 .key{width:11px;height:11px;border-radius:50%;display:inline-block}.key.sq{border-radius:1px}
 </style></head><body><main>
 <header class="top"><div><h1 id="title"></h1><p class="m" id="total"></p><p class="m" id="source" role="status"></p></div><label class="m"><span id="langLabel"></span> <select id="lang"><option value="en">English</option><option value="fr">Français</option><option value="rn">Ikirundi</option></select></label></header>
-<section><div class="chips"><button id="all"></button><span class="m" id="status" role="status"></span></div><div class="layers"><label><input type="checkbox" data-layer="water" checked><span class="key" style="background:var(--water)"></span><span data-t="water"></span></label><label><input type="checkbox" data-layer="roads" checked><span class="key sq" style="background:var(--road)"></span><span data-t="roads"></span></label></div><svg id="map" role="group"></svg><p class="m" id="layerNote" role="status"></p><p class="m" id="hint"></p></section>
+<section><div class="chips"><button id="all"></button><span class="m" id="status" role="status"></span></div><div class="layers"><label><input type="checkbox" data-layer="water"><span class="key" style="background:var(--water)"></span><span data-t="water"></span></label><label><input type="checkbox" data-layer="roads"><span class="key sq" style="background:var(--road)"></span><span data-t="roads"></span></label></div><svg id="map" role="group"></svg><p class="m" id="layerNote" role="status"></p><p class="m" id="hint"></p></section>
 <section><label for="q" class="m" id="qLabel"></label><input id="q" type="search"><div id="results" class="list"></div><div id="info" style="margin-top:14px"></div></section>
 <p class="m" id="credit" style="grid-column:1/-1"></p>
 </main>
@@ -56,7 +56,7 @@ function index(){BASE=D.provinces.flatMap(p=>[p,...p.communes]).map(o=>[o.id,at(
 function path(g,cls,label,go){const e=document.createElementNS(NS,'path');e.setAttribute('d',dpath(g));e.setAttribute('class',cls);if(label){const t=document.createElementNS(NS,'title');t.textContent=label;e.append(t)}if(go){e.setAttribute('tabindex','0');e.setAttribute('role','button');e.setAttribute('aria-label',label);e.onclick=go;e.onkeydown=v=>{if(v.key==='Enter'||v.key===' '){v.preventDefault();go()}}}svg.append(e);return e}
 function label(pos,text,s,cls){const t=document.createElementNS(NS,'text');if(cls)t.setAttribute('class',cls);t.setAttribute('x',X(pos[0]));t.setAttribute('y',Y(pos[1]));t.style.fontSize=11*s+'px';t.style.strokeWidth=3*s+'px';t.textContent=text;svg.append(t)}
 let shapes={};
-const on={water:true,roads:true},L={},bad={};
+const on={water:false,roads:false},L={},bad={};
 const LAYERS={water:d=>Array.isArray(d?.lakes)&&Array.isArray(d.rivers),roads:d=>Array.isArray(d?.roads)};
 function lpath(lines){return lines.map(r=>'M'+r.map(([x,y])=>X(x).toFixed(1)+' '+Y(y).toFixed(1)).join('L')).join('')}
 function add(tag,attrs){const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);svg.append(e);return e}

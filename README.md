@@ -11,6 +11,7 @@ Interactive map of Burundi's new administrative structure: 5 provinces, 42 commu
 | `roads.json` | National roads (RN1 to RN22 and RN24). |
 | `index.html` | The map. |
 | `i18n.js` | Interface text in the three languages. |
+| `LICENSE` | Licence terms. |
 
 ## Data format
 
@@ -39,6 +40,8 @@ Boundaries are simplified for display. Do not use them for surveying or legal pu
 
 ## Map layers
 
+Both layers are off by default. Tick their boxes to show them.
+
 - **Lakes and rivers:** from OpenStreetMap, clipped to Burundi and simplified.
 - **National roads:** OpenStreetMap ways tagged RN1 to RN24 (no RN23 was tagged). Lines may have gaps.
 
@@ -58,9 +61,18 @@ To publish with GitHub Pages: **Settings > Pages > Deploy from a branch > `main`
 
 If you rename the repository or the account, update `REPO` in `index.html`.
 
-## Sources and licence
+## Sources
 
 - Names and structure: based on [Ijwi-ry-Ikirundi-AI/burundi-geo-data](https://github.com/Ijwi-ry-Ikirundi-AI/burundi-geo-data), which states the data is open for personal, educational and commercial use. Corrections were made using the boundaries below.
 - Boundaries and coordinates: [Burundi administrative boundaries (COD-AB), version v02, on HDX](https://data.humdata.org/dataset/cod-ab-bdi), source IGEBU and OCHA, under Creative Commons Attribution for Intergovernmental Organisations (CC BY-IGO). Simplified and rounded for this map.
 - Population: 2024 census, province level.
-- `water.json` and `roads.json`: © [OpenStreetMap contributors](https://www.openstreetmap.org/copyright), from Humanitarian OpenStreetMap Team exports and Overpass, under the [Open Database License (ODbL)](https://opendatacommons.org/licenses/odbl/). These two files remain under ODbL.
+- `water.json` and `roads.json`: © [OpenStreetMap contributors](https://www.openstreetmap.org/copyright), from Humanitarian OpenStreetMap Team exports and Overpass, under the [Open Database License (ODbL)](https://opendatacommons.org/licenses/odbl/).
+
+## Licences
+
+This project is free to use, including for commercial purposes, as long as you give credit.
+
+| Files | Licence | What you must do |
+|---|---|---|
+| `index.html`, `i18n.js`, `burundi-geo.json` | [CC BY 3.0 IGO](https://creativecommons.org/licenses/by/3.0/igo/), see [LICENSE](LICENSE) | Give credit, link to the licence and say if you made changes. For the data, also credit IGEBU, OCHA (via HDX) and the original data project. |
+| `water.json`, `roads.json` | [ODbL 1.0](https://opendatacommons.org/licenses/odbl/1-0/) | Credit OpenStreetMap contributors. Share adapted versions of the data under ODbL. |
