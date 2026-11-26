@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Burundi Subdivisions Map</title>
+<style>
+:root{--bg:#f4f6f4;--panel:#fff;--ink:#17251f;--muted:#5b6b64;--line:#d5ded9;--accent:#b4442f;--s1:#d9ebe0;--s2:#b3d7c3;--s3:#8cc1a5;--s4:#62a886;--s5:#3d8c69;--edge:#17251f}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){color-scheme:dark;--bg:#101714;--panel:#18211d;--ink:#e7efea;--muted:#9db0a6;--line:#2d3b34;--accent:#ff8a70;--s1:#1d3a2d;--s2:#24503c;--s3:#2c664b;--s4:#367e5c;--s5:#43976f;--edge:#e7efea}}
+:root[data-theme=dark]{color-scheme:dark;--bg:#101714;--panel:#18211d;--ink:#e7efea;--muted:#9db0a6;--line:#2d3b34;--accent:#ff8a70;--s1:#1d3a2d;--s2:#24503c;--s3:#2c664b;--s4:#367e5c;--s5:#43976f;--edge:#e7efea}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,sans-serif;padding:16px}
+main{max-width:1100px;margin:auto;display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:16px}
+header{grid-column:1/-1}h1{margin:0;font-size:24px}h2{margin:0 0 4px;font-size:19px}p{margin:4px 0}.m{color:var(--muted);font-size:13px}
+section{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px;min-width:0}
+svg{width:100%;height:auto;max-height:78vh;display:block}
+path{stroke:var(--edge);vector-effect:non-scaling-stroke;cursor:pointer;fill-rule:evenodd}
+.p{stroke-width:1.5}.c{stroke-width:.6;fill:transparent}path:hover,path:focus-visible{stroke:var(--accent);stroke-width:2.5;outline:none}path.on{fill:var(--accent);fill-opacity:.55}
+text{font-size:11px;font-weight:700;fill:var(--ink);text-anchor:middle;pointer-events:none;paint-order:stroke;stroke:var(--panel);stroke-width:3px}
+input{width:100%;font:inherit;padding:9px;border:1px solid var(--line);border-radius:7px;background:var(--bg);color:var(--ink)}
+button{font:inherit;color:inherit;background:none;border:1px solid var(--line);border-radius:7px;padding:6px 10px;cursor:pointer;text-align:left}
+button:hover,button:focus-visible{border-color:var(--accent)}
+.list{display:grid;gap:6px;margin-top:10px}.chips{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.row{display:flex;justify-content:space-between;gap:10px;font-variant-numeric:tabular-nums}
+details{border-top:1px solid var(--line);padding:6px 0}summary{cursor:pointer}ul{columns:2;margin:6px 0;padding-left:18px}li.hit{color:var(--accent);font-weight:700}
+#results{max-height:260px;overflow:auto}
+@media(max-width:760px){main{grid-template-columns:minmax(0,1fr)}}
+.top{display:flex;justify-content:space-between;align-items:start;gap:12px;flex-wrap:wrap}select{font:inherit;color:inherit;background:var(--panel);border:1px solid var(--line);border-radius:7px;padding:6px}
+.h{stroke-width:.5;fill:var(--panel)}.z{fill:none;stroke-width:1.8;pointer-events:none}.na{fill:var(--line)}.z.zon{stroke:var(--accent);stroke-width:3}path.h.on{fill:var(--accent);fill-opacity:.8}li button{border:0;padding:0}li.hit button{color:var(--accent);font-weight:700}
+</style></head><body><main>
+<header class="top"><div><h1 id="title"></h1><p class="m" id="total"></p><p class="m" id="source" role="status"></p></div><label class="m"><span id="langLabel"></span> <select id="lang"><option value="en">English</option><option value="fr">Français</option><option value="rn">Ikirundi</option></select></label></header>
+<section><div class="chips"><button id="all"></button><span class="m" id="status" role="status"></span></div><svg id="map" role="group"></svg><p class="m" id="hint"></p></section>
+<section><label for="q" class="m" id="qLabel"></label><input id="q" type="search"><div id="results" class="list"></div><div id="info" style="margin-top:14px"></div></section>
+<p class="m" id="credit" style="grid-column:1/-1"></p>
+</main>
+<script src="i18n.js"></script>
+<script>
+// The live file on GitHub is tried first, then the copy next to this page.
+const SOURCES=['https://raw.githubusercontent.com/Blixy4/burundi-map/main/burundi-geo.json','burundi-geo.json'];
+const $=i=>document.getElementById(i),el=(t,x,c)=>{const e=document.createElement(t);if(x!=null)e.textContent=x;if(c)e.className=c;return e};
+const NS='http://www.w3.org/2000/svg',svg=$('map');
+let D,BASE=[],lang='en',live=false,failed=false,sel={},idx={},S=[];
+const T=(k,v={})=>(I18N[lang][k]??I18N.en[k]).replace(/\{(\w+)\}/g,(m,n)=>v[n]??m);
+const num=n=>n.toLocaleString(lang==='en'?'en-US':'fr-FR');
+const K=Math.cos(3.4*Math.PI/180),X=x=>x*K*300,Y=y=>-y*300;
+const dpath=g=>g.map(p=>p.map(r=>'M'+r.map(([x,y])=>X(x).toFixed(1)+' '+Y(y).toFixed(1)).join('L')+'Z').join('')).join('');
+const box=gs=>{let a=1e9,b=1e9,c=-1e9,d=-1e9;gs.forEach(g=>g.forEach(p=>p[0].forEach(([x,y])=>{a=Math.min(a,X(x));b=Math.min(b,Y(y));c=Math.max(c,X(x));d=Math.max(d,Y(y))})));return[a,b,c,d]};
+const hills=c=>c.zones.reduce((a,z)=>a+z.hills_neighborhoods.length,0);
+const shaped=o=>o.id&&o.center&&Array.isArray(o.boundary);
+const valid=d=>Array.isArray(d?.provinces)&&d.provinces.every(p=>shaped(p)&&p.stats?.population&&p.communes?.every(c=>shaped(c)&&c.zones?.every(z=>shaped(z)&&z.hills_neighborhoods?.every(shaped))));
+async function load(){for(const u of SOURCES){try{const r=await fetch(u,{cache:'no-cache',signal:AbortSignal.timeout(60000)});if(!r.ok)continue;const d=await r.json();if(valid(d))return[d,u.startsWith('https:')]}catch(e){}}return[window.SNAPSHOT,false]}
+const at=o=>[o.center.longitude,o.center.latitude];
+// Shapes of one commune: [id, polygons]; id is null for areas without a name.
+function shapesOf(c){const u=c.unnamed_areas||{},na=k=>(u[k]||[]).map(g=>[null,g]);
+ return{z:[...c.zones.map(z=>[z.id,z.boundary]),...na('zones')],h:[...c.zones.flatMap(z=>z.hills_neighborhoods.map(h=>[h.id,h.boundary])),...na('hills_neighborhoods')]}}
+function index(){BASE=D.provinces.flatMap(p=>[p,...p.communes]).map(o=>[o.id,at(o),o.boundary]);idx={};S=[];D.provinces.forEach(p=>{idx[p.id]={p};S.push([p,'provinces','',{p:p.id}]);p.communes.forEach(c=>{idx[c.id]={p,c};S.push([c,'tCommune',p.name,{p:c.id}]);c.zones.forEach(z=>{S.push([z,'tZone',c.name+', '+p.name,{p:c.id,z:z.id}]);z.hills_neighborhoods.forEach(h=>S.push([h,'tHill',z.name+', '+c.name,{p:c.id,z:z.id,h:h.id}]))})})})}
+function path(g,cls,label,go){const e=document.createElementNS(NS,'path');e.setAttribute('d',dpath(g));e.setAttribute('class',cls);if(label){const t=document.createElementNS(NS,'title');t.textContent=label;e.append(t)}if(go){e.setAttribute('tabindex','0');e.setAttribute('role','button');e.setAttribute('aria-label',label);e.onclick=go;e.onkeydown=v=>{if(v.key==='Enter'||v.key===' '){v.preventDefault();go()}}}svg.append(e);return e}
+function label(pos,text,s){const t=document.createElementNS(NS,'text');t.setAttribute('x',X(pos[0]));t.setAttribute('y',Y(pos[1]));t.style.fontSize=11*s+'px';t.style.strokeWidth=3*s+'px';t.textContent=text;svg.append(t)}
+let shapes={};
+function draw(){const e=sel.p&&idx[sel.p],G=e?.c&&shapesOf(e.c);
+ svg.replaceChildren();shapes={};const rank=[...D.provinces].sort((a,b)=>a.stats.population.value-b.stats.population.value).map(p=>p.id);
+ const provs=BASE.filter(f=>idx[f[0]]&&!idx[f[0]].c),coms=BASE.filter(f=>idx[f[0]]?.c&&e&&idx[f[0]].p===e.p);
+ provs.forEach(([id,,g])=>path(g,'p',idx[id].p.name,()=>show({p:id})).style.fill=`var(--s${rank.indexOf(id)+1})`);
+ coms.forEach(([id,,g])=>shapes[id]=path(g,'c',idx[id].c.name,()=>show({p:id})));
+ if(G){const names={},zmap={};e.c.zones.forEach(z=>{zmap[z.id]=z;z.hills_neighborhoods.forEach(h=>names[h.id]=[h,z])});
+  G.h.forEach(([id,g])=>{const n=names[id];const s=path(g,n?'h':'h na',n?`${n[0].name} (${n[1].name})`:T('protected'),n?()=>show({p:e.c.id,z:n[1].id,h:id}):null);if(n)shapes[id]=s});
+  G.z.forEach(([id,g])=>{const s=path(g,'z');if(id)shapes[id]=s})}
+ const f=e?BASE.filter(f=>f[0]===(e.c?e.c.id:e.p.id)):provs,b=box(f.map(x=>x[2])),m=6,w=b[2]-b[0]+m*2,h=b[3]-b[1]+m*2,s=Math.max(w,h)/620;
+ svg.setAttribute('viewBox',[b[0]-m,b[1]-m,w,h].join(' '));
+ if(!e)provs.forEach(([id,at])=>label(at,`${idx[id].p.name} (${id})`,s));else if(!e.c)coms.forEach(([id,at])=>label(at,idx[id].c.name,s));
+ mark()}
+function mark(){Object.values(shapes).forEach(s=>s.classList.remove('on','zon'));if(sel.z&&shapes[sel.z]){shapes[sel.z].classList.add('zon');svg.append(shapes[sel.z])}if(sel.h){shapes[sel.h]?.classList.add('on')}}
+const row=(a,b,go)=>{const r=el('button',null,'row');r.append(el('span',a),el('span',b,'m'));r.onclick=go;return r};
+function info(){const B=$('info');B.replaceChildren();const e=sel.p&&idx[sel.p],l=el('div',null,'list');
+ if(!e){B.append(el('h2',T('provinces')),l);D.provinces.forEach(p=>l.append(row(`${p.name} (${p.id})`,T('residents',{n:num(p.stats.population.value)}),()=>show({p:p.id}))));return}
+ const{p,c}=e;
+ if(!c){const o=p.stats.population;B.append(el('h2',T('province',{name:p.name})),el('p',`${p.id}. ${T('capital',{name:p.capital})}`),el('p',T('census',{n:num(o.value),year:o.year})),el('p',[T('nCommunes',{n:p.communes.length}),T('nZones',{n:p.communes.reduce((a,c)=>a+c.zones.length,0)}),T('nHills',{n:num(p.communes.reduce((a,c)=>a+hills(c),0))})].join('. ')),l);p.communes.forEach(c=>l.append(row(c.name,T('nZones',{n:c.zones.length}),()=>show({p:c.id}))));return}
+ const back=el('button',T('back',{name:p.name}));back.onclick=()=>show({p:p.id});
+ B.append(el('h2',T('commune',{name:c.name})),el('p',`${c.id}. ${T('nZones',{n:c.zones.length})}. ${T('nHills',{n:hills(c)})}`),back,l);
+ c.zones.forEach(z=>{const d=el('details'),u=el('ul'),s=el('summary',`${z.name} (${z.hills_neighborhoods.length})`);d.dataset.z=z.id;d.open=z.id===sel.z;d.append(s,u);
+  s.onclick=()=>{sel={p:c.id,z:d.open?undefined:z.id};mark()};
+  z.hills_neighborhoods.forEach(h=>{const li=el('li',null,h.id===sel.h?'hit':''),b=el('button',h.name);b.onclick=()=>{sel={p:c.id,z:z.id,h:h.id};u.closest('.list').querySelectorAll('li').forEach(x=>x.className='');li.className='hit';mark()};li.append(b);u.append(li)});l.append(d)});
+ l.querySelector('details[open]')?.scrollIntoView({block:'nearest'})}
+function show(n={}){const same=n.p&&n.p===sel.p&&idx[n.p]?.c;sel=n;info();if(same&&Object.keys(shapes).length)mark();else draw()}
+const norm=s=>s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+function search(){const q=norm($('q').value.trim()),R=$('results');R.replaceChildren();if(q.length<2)return;
+ const f=S.filter(([o])=>norm(o.name).includes(q)||norm(o.id)===q).sort((a,b)=>(norm(b[0].name)===q)-(norm(a[0].name)===q));
+ R.append(el('p',f.length?T('results',{n:f.length})+(f.length>50?'. '+T('showing',{n:50}):''):T('none'),'m'));
+ f.slice(0,50).forEach(([o,k,w,n])=>R.append(row(o.name,k==='provinces'?o.id:T(k,{in:w}),()=>{R.replaceChildren();show({...n})})))}
+function texts(){document.documentElement.lang=lang;document.title=T('title');svg.setAttribute('aria-label',T('mapLabel'));
+ for(const[i,k]of[['title','title'],['langLabel','language'],['all','country'],['hint','hint'],['qLabel','search'],['credit','credit']])$(i).textContent=T(k);
+ $('q').placeholder=T('example');if(!D){$('source').textContent=T(failed?'mapError':'loading');return}
+ $('source').textContent=T(live?'live':'saved');const P=D.provinces,C=P.flatMap(p=>p.communes);
+ $('total').textContent=[`${T('provinces')}: ${P.length}`,T('nCommunes',{n:C.length}),T('nZones',{n:C.reduce((a,c)=>a+c.zones.length,0)}),T('nHills',{n:num(C.reduce((a,c)=>a+hills(c),0))})].join(' · ')}
+try{lang=localStorage.getItem('lang')}catch(e){lang=null}
+if(!I18N[lang])lang=I18N[navigator.language?.slice(0,2)]?navigator.language.slice(0,2):'en';
+$('lang').value=lang;texts();
+$('lang').onchange=()=>{lang=$('lang').value;try{localStorage.setItem('lang',lang)}catch(e){}texts();if(D){info();draw();search()}};
+load().then(([d,l])=>{if(!d){failed=true;texts();return}D=d;live=l;index();texts();$('q').oninput=search;$('all').onclick=()=>show();show();search()});
+</script></body></html>
