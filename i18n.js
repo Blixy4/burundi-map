@@ -1,10 +1,9 @@
 // Interface translations. Edit the text between quotes only; keep the {…} placeholders.
-// The Kirundi (rn) text is a DRAFT and must be checked by a fluent speaker.
 window.I18N = {
   en: {
     title: "Burundi subdivisions", mapLabel: "Map of Burundi", language: "Language", country: "Whole country",
     hint: "Darker provinces have more residents. Select a province, then a commune.",
-    search: "Search by name or ID", example: "Example: Gitanga or BR-C07",
+    search: "Search by name or ID", example: "Example: Gitanga, BR-C07 or RN1",
     results: "Results: {n}", showing: "Showing the first {n}.", none: "No match. Check the spelling or try a shorter name.",
     provinces: "Provinces", province: "Province of {name}", commune: "Commune of {name}", capital: "Capital: {name}",
     residents: "{n} residents", census: "{n} residents ({year})",
@@ -12,12 +11,17 @@ window.I18N = {
     back: "Back to {name}", tCommune: "Commune in {in}", tZone: "Zone in {in}", tHill: "Colline or quartier in {in}",
     protected: "Protected area or no data", loading: "Loading…", mapError: "The map data could not be loaded. Check your connection and reload the page.",
     live: "Live data from GitHub", saved: "Saved copy (GitHub could not be reached)",
-    credit: "Boundaries: IGEBU and OCHA via HDX, version v02 (CC BY-IGO), simplified. Population: 2024 census, province level."
+    credit: "Boundaries: IGEBU and OCHA via HDX, version v02 (CC BY-IGO), simplified. Population: 2024 census, province level. Roads and water: © OpenStreetMap contributors (ODbL).",
+    water: "Lakes and rivers",
+    roads: "National roads",
+    road: "National road {ref}",
+    roadNote: "Road lines come from OpenStreetMap and may have gaps.",
+    layerError: "Some map layers could not be loaded."
   },
   fr: {
     title: "Subdivisions du Burundi", mapLabel: "Carte du Burundi", language: "Langue", country: "Tout le pays",
     hint: "Les provinces les plus foncées sont les plus peuplées. Choisissez une province, puis une commune.",
-    search: "Rechercher par nom ou identifiant", example: "Exemple : Gitanga ou BR-C07",
+    search: "Rechercher par nom ou identifiant", example: "Exemple : Gitanga, BR-C07 ou RN1",
     results: "Résultats : {n}", showing: "Les {n} premiers sont affichés.", none: "Aucun résultat. Vérifiez l'orthographe ou essayez un nom plus court.",
     provinces: "Provinces", province: "Province de {name}", commune: "Commune de {name}", capital: "Chef-lieu : {name}",
     residents: "{n} habitants", census: "{n} habitants ({year})",
@@ -25,12 +29,17 @@ window.I18N = {
     back: "Retour à {name}", tCommune: "Commune de la province {in}", tZone: "Zone : {in}", tHill: "Colline ou quartier : {in}",
     protected: "Aire protégée ou sans données", loading: "Chargement…", mapError: "Les données de la carte n'ont pas pu être chargées. Vérifiez votre connexion et rechargez la page.",
     live: "Données en direct depuis GitHub", saved: "Copie enregistrée (GitHub est inaccessible)",
-    credit: "Limites : IGEBU et OCHA via HDX, version v02 (CC BY-IGO), simplifiées. Population : recensement de 2024, par province."
+    credit: "Limites : IGEBU et OCHA via HDX, version v02 (CC BY-IGO), simplifiées. Population : recensement de 2024, par province. Routes et eaux : © les contributeurs d'OpenStreetMap (ODbL).",
+    water: "Lacs et rivières",
+    roads: "Routes nationales",
+    road: "Route nationale {ref}",
+    roadNote: "Les tracés viennent d'OpenStreetMap et peuvent présenter des interruptions.",
+    layerError: "Certaines couches de la carte n'ont pas pu être chargées."
   },
   rn: {
     title: "Intara n'amakomine vy'Uburundi", mapLabel: "Ikarata y'Uburundi", language: "Ururimi", country: "Igihugu cose",
     hint: "Intara zifise ibara ryijimye ni zo zifise abantu benshi. Hitamwo intara, uheze uhitemwo komine.",
-    search: "Rondera ukoresheje izina canke ID", example: "Akarorero: Gitanga canke BR-C07",
+    search: "Rondera ukoresheje izina canke ID", example: "Akarorero: Gitanga, BR-C07 canke RN1",
     results: "Ivyabonetse: {n}", showing: "Herekanywe {n} vya mbere.", none: "Nta co turonse. Raba ko wanditse neza canke ugerageze izina rigufi.",
     provinces: "Intara", province: "Intara ya {name}", commune: "Komine ya {name}", capital: "Umurwa mukuru: {name}",
     residents: "Abantu {n}", census: "Abantu {n} ({year})",
@@ -38,6 +47,11 @@ window.I18N = {
     back: "Subira kuri {name}", tCommune: "Komine yo mu ntara ya {in}", tZone: "Zone yo muri {in}", tHill: "Umutumba canke ikaritiye vyo muri {in}",
     protected: "Ahantu hakingiwe canke hatagira amakuru", loading: "Biriko biraza…", mapError: "Amakuru y'ikarata ntiyashoboye kuza. Raba ko ufise interineti, uheze usubire wugurure uru rupapuro.",
     live: "Amakuru ava kuri GitHub ubu nyene", saved: "Kopi yabitswe (GitHub ntiyashitseko)",
-    credit: "Imbibe: IGEBU na OCHA biciye kuri HDX, verisiyo v02 (CC BY-IGO), zoroheje. Igitigiri c'abantu: Ibarura ryo mu 2024, kuri buri ntara."
+    credit: "Imbibe: IGEBU na OCHA biciye kuri HDX, verisiyo v02 (CC BY-IGO), zoroheje. Igitigiri c'abantu: Ibarura ryo mu 2024, kuri buri ntara. Amabarabara n'amazi: © abaterera kuri OpenStreetMap (ODbL).",
+    water: "Ibiyaga n'inzuzi",
+    roads: "Amabarabara nyamukuru y'igihugu",
+    road: "Ibarabara nyamukuru {ref}",
+    roadNote: "Imirongo y'amabarabara iva kuri OpenStreetMap kandi ishobora kubura ahantu hamwe.",
+    layerError: "Hari ibice vy'ikarata bitashoboye kuza."
   }
 };

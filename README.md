@@ -7,6 +7,8 @@ Interactive map of Burundi's new administrative structure: 5 provinces, 42 commu
 | File | Purpose |
 |---|---|
 | `burundi-geo.json` | Names, IDs, population and coordinates. The map is drawn from this file. |
+| `water.json` | Lakes and rivers. |
+| `roads.json` | National roads (RN1 to RN22 and RN24). |
 | `index.html` | The map. |
 | `i18n.js` | Interface text in the three languages. |
 
@@ -35,9 +37,14 @@ The `boundary` in this example is shortened.
 
 Boundaries are simplified for display. Do not use them for surveying or legal purposes.
 
+## Map layers
+
+- **Lakes and rivers:** from OpenStreetMap, clipped to Burundi and simplified.
+- **National roads:** OpenStreetMap ways tagged RN1 to RN24 (no RN23 was tagged). Lines may have gaps.
+
 ## Run it
 
-The page loads `burundi-geo.json` from the `main` branch of this repository. If that fails, it tries the copy in the same folder.
+The page loads each data file from the `main` branch of this repository. If that fails, it tries the copy in the same folder.
 
 To preview locally:
 
@@ -49,10 +56,11 @@ Then open http://localhost:8000.
 
 To publish with GitHub Pages: **Settings > Pages > Deploy from a branch > `main` / root**. The map will be at https://blixy4.github.io/burundi-map/.
 
-If you rename the repository or the account, update `SOURCES` in `index.html`.
+If you rename the repository or the account, update `REPO` in `index.html`.
 
 ## Sources and licence
 
 - Names and structure: based on [Ijwi-ry-Ikirundi-AI/burundi-geo-data](https://github.com/Ijwi-ry-Ikirundi-AI/burundi-geo-data), which states the data is open for personal, educational and commercial use. Corrections were made using the boundaries below.
 - Boundaries and coordinates: [Burundi administrative boundaries (COD-AB), version v02, on HDX](https://data.humdata.org/dataset/cod-ab-bdi), source IGEBU and OCHA, under Creative Commons Attribution for Intergovernmental Organisations (CC BY-IGO). Simplified and rounded for this map.
 - Population: 2024 census, province level.
+- `water.json` and `roads.json`: © [OpenStreetMap contributors](https://www.openstreetmap.org/copyright), from Humanitarian OpenStreetMap Team exports and Overpass, under the [Open Database License (ODbL)](https://opendatacommons.org/licenses/odbl/). These two files remain under ODbL.
