@@ -1,5 +1,9 @@
 # Burundi Map
 
+**Created and maintained by [Blixy4](https://github.com/Blixy4).**
+
+**[View the live map](https://blixy4.github.io/burundi-map/)**
+
 Interactive map of Burundi's new administrative structure: 5 provinces, 42 communes, 451 zones and 3,044 collines and quartiers. The interface is available in English, French and Kirundi.
 
 ## Files
@@ -44,22 +48,6 @@ Both layers are off by default. Tick their boxes to show them.
 
 - **Lakes and rivers:** from OpenStreetMap, clipped to Burundi and simplified.
 - **National roads:** OpenStreetMap ways tagged RN1 to RN24 (no RN23 was tagged). Lines may have gaps.
-
-## Run it
-
-The page loads each data file from the `main` branch of this repository. If that fails, it tries the copy in the same folder.
-
-To preview locally:
-
-```sh
-python -m http.server 8000
-```
-
-Then open http://localhost:8000.
-
-To publish with GitHub Pages: **Settings > Pages > Deploy from a branch > `main` / root**. The map will be at https://blixy4.github.io/burundi-map/.
-
-If you rename the repository or the account, update `REPO` in `index.html`.
 
 ## Sources
 
